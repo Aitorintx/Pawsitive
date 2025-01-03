@@ -1,0 +1,107 @@
+/* Estilos existentes */
+body {
+    background-color: #fce4ec; /* Color de fondo rosado suave */
+    font-family: Arial, sans-serif; /* Tipo de fuente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    width: 380px; /* Ancho del contenedor */
+    background: #fce4ec; /* Fondo blanco para el formulario */
+    padding: 20px; /* Espaciado interno */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 2px 10px rgba(255, 255, 255, 0); /* Sin sombra */
+    text-align: center; /* Centrado de texto */
+}
+
+img {
+    width: 100px; /* Ajuste del tamaño del logo */
+    height: auto;
+}
+
+input[type="text"], input[type="password"] {
+    flex: 1; /* Hacer que los inputs ocupen todo el espacio restante */
+    padding: 8px; /* Espaciado interno */
+    border: 1px solid #ccc; /* Bordes grises */
+    border-radius: 4px; /* Bordes redondeados */
+    margin: 0; /* Eliminar márgenes */
+    box-sizing: border-box; /* Incluir padding y borde en el ancho total */
+}
+
+
+button {
+    background: none; /* Sin fondo */
+    border: none; /* Sin bordes */
+    color: blue; /* Texto azul */
+    text-decoration: underline; /* Subrayado como un enlace */
+    font-size: 16px; /* Tamaño de fuente */
+    cursor: pointer; /* Cursor de mano al pasar el ratón */
+    padding: 0; /* Sin padding */
+}
+
+.form-container {
+    position: relative; /* Necesario para posicionar el botón entre los campos */
+    width: 100%; /* Asegurarse de que ocupa todo el ancho */
+}
+
+.label {
+    display: inline-block;
+    background-color: #ffd87e; /* Un amarillo similar al de la imagen */
+    color: black; /* Texto negro */
+    padding: 5px 10px; /* Espaciado interno */
+    border-radius: 5px; /* Bordes redondeados */
+    margin-right: 10px; /* Espaciado a la derecha de la etiqueta */
+    font-weight: bold; /* Texto en negrita */
+    text-align: center; /* Centrar el texto */
+    width: 180px; /* Ancho fijo para uniformidad (ajustar según necesidad) */
+    box-sizing: border-box; /* Asegura que padding se incluya en el ancho */
+}
+
+.input-container {
+    display: flex; /* Flexbox para organizar etiqueta y campo de entrada */
+    align-items: center; /* Centrar verticalmente */
+    margin-bottom: 10px; /* Espaciado entre filas */
+}
+
+.button-between {
+    position: absolute; /* Mantén posición absoluta */
+    left: calc(100% + 20px); /* Mueve el botón al extremo derecho del contenedor */
+    top: 50%; /* Posición vertical entre los campos */
+    transform: translateY(-50%); /* Centrar verticalmente */
+}
+
+.arrow-button {
+    background-color: #8FB8A8; /* Fondo verde */
+    color: #E0F4F1; /* Color de la flecha */
+    border: none; /* Sin bordes */
+    border-radius: 5px; /* Bordes redondeados */
+    width: 50px; /* Ancho del botón */
+    height: 50px; /* Alto del botón */
+    display: flex; /* Usar flexbox para centrar la flecha */
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center; /* Centrar verticalmente */
+    cursor: pointer; /* Cursor en forma de mano */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra sutil */
+    font-size: 24px; /* Tamaño más grande para la flecha */
+    font-weight: bold; /* Flecha más gruesa */
+}
+
+.arrow-button:hover {
+    background-color: #81A998; /* Fondo verde más oscuro al pasar */
+}
+
+.arrow-container {
+    display: flex; /* Usar flexbox para alineación */
+    justify-content: flex-end; /* Botón alineado a la derecha */
+    align-items: center; /* Centrar verticalmente */
+    margin-top: -10px; /* Ajusta la posición vertical */
+    margin-bottom: 20px; /* Espaciado inferior */
+}
+
+.arrow-button:hover {
+    background-color: #81A998; /* Cambia el fondo en hover */
+}
