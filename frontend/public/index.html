@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAWsitive - InicioSes</title>
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+    <div class="container" id="app-container">
+        <img src="static/images/perro.png" alt="PAWsitive Logo">
+        <h1>PAWsitive</h1>
+        <form action="/submit-your-form-handler" method="post">
+            <div class="form-container">
+                <div class="input-container">
+                    <label class="label" for="username">Nombre:</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="input-container">
+                    <label class="label" for="password">Contraseña:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="button-between">
+                    <button class="arrow-button" type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="#E0F4F1">
+                            <path d="M10 17l5-5-5-5v10z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="button-container">
+                <button id="registrarse-btn" type="button">Registrarse</button>  
+            </div>
+        </form>
+    </div>
+    <script>
+        document.getElementById('registrarse-btn').addEventListener('click', function() {
+            fetch('registro.html')  // Realiza la solicitud a la ruta de registro
+                .then(response => response.text())  // Recibe el contenido de la página
+                .then(html => {
+                    // Inserta el contenido de registro.html en el contenedor
+                    const contenedorElemento = document.getElementById('app-container');
+                    if (contenedorElemento){
+                        contenedorElemento.innerHTML = '';  // Borra el contenido anterior
+                        contenedorElemento.innerHTML = html;
+                        window.history.pushState({}, '', '/registro');
+                    }
+                    
+                })
+                .catch(error => {
+                    console.warn('Error al cargar el template:', error);
+                });
+        });
+    </script>
+</body>
+</html>
