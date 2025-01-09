@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAWsitive - InicioSes</title>
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+    <div class="container" id="app-container">
+        <img src="static/images/perro.png" alt="PAWsitive Logo">
+        <h1>PAWsitive</h1>
+        <form action="/submit-your-form-handler" method="post">
+            <div class="form-container">
+                <div class="input-container">
+                    <label class="label" for="username">Nombre:</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="input-container">
+                    <label class="label" for="password">Contraseña:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="button-between">
+                    <button id="iniciar" class="arrow-button" type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="#E0F4F1">
+                            <path d="M10 17l5-5-5-5v10z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="button-container">
+                <button id="registrarse-btn" type="button">Registrarse</button>  
+            </div>
+        </form>
+    </div>
+    <script>
+        document.getElementById('iniciar').addEventListener('click', function(event) {
+            event.preventDefault();  // Previene el envío por defecto del formulario
+
+            // Obtener los datos del formulario
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (!username || !password) {
+                alert("Por favor ingrese ambos campos.");
+                return;
+            }
+
+            // Enviar los datos al API Gateway (Node.js)
+            fetch('http://localhost:3000/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: username, password: password })
+            })
+            .then(response => response.json())  // Convertir la respuesta en JSON
+            .then(data => {
+                if (data.success) {
+                    // Si el login es exitoso, redirigir a otra página o mostrar mensaje de éxito
+                    alert("Inicio de sesión exitoso");
+                    window.location.href = "/pantallaInicio";  // Redirigir a la página de inicio
+                } else {
+                    // Si el login falla, mostrar un mensaje de error
+                    alert("Credenciales incorrectas");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        document.getElementById('registrarse-btn').addEventListener('click', function() {
+            fetch('/registro')  // Realiza la solicitud a la ruta de registro
+                .then(response => response.text())  // Recibe el contenido de la página
+                .then(html => {
+                    // Inserta el contenido de registro.html en el contenedor
+                    const contenedorElemento = document.getElementById('app-container');
+                    if (contenedorElemento){
+                        contenedorElemento.innerHTML = '';  // Borra el contenido anterior
+                        contenedorElemento.innerHTML = html;
+                        window.history.pushState({}, '', '/registro');
+                    }
+                    
+                })
+                .catch(error => {
+                    console.warn('Error al cargar el template:', error);
+                });
+        });
+    </script>
+</body>
+</html>

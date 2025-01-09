@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario Interactivo</title>
+    <link rel="stylesheet" href='static/css/style.css'>
+</head>
+<body>
+    <div class="calendar-container">
+        <div class="calendar-header">
+            <button id="prev-month">&#x2190;</button>
+            <h2 id="month-name">ENERO 2025</h2>
+            <button id="next-month">&#x2192;</button>
+        </div>
+
+        <div class="calendar">
+            <div class="calendar-days">
+                <div class="calendar-day">L</div>
+                <div class="calendar-day">M</div>
+                <div class="calendar-day">X</div>
+                <div class="calendar-day">J</div>
+                <div class="calendar-day">V</div>
+                <div class="calendar-day">S</div>
+                <div class="calendar-day">D</div>
+            </div>
+            <div class="calendar-dates" id="calendar-dates"></div>
+        </div>
+
+        <div class="event-list">
+            <h3>Eventos Este Mes</h3>
+            <ul id="event-list">
+                <!-- Eventos dinámicos serán agregados aquí -->
+            </ul>
+        </div>
+        
+        <div class="add-event">
+            <button id="add-event-button">+</button>
+        </div>
+    </div>
+
+    <script src="static/js/calendar.js"></script>
+</body>
+</html>

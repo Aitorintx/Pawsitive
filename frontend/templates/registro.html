@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAWsitive - InicioSes</title>
+    <link rel="stylesheet" href='static/css/style.css'">
+</head>
+<body>
+    <div class="container" id="app-container">
+        <div class="dog-container">
+            <img src="static/images/perro.png" alt="PAWsitive Logo" class="dog-image">
+            
+            <!-- Bocadillo de texto al lado de la boca del perro -->
+            <div class="speech-bubble">
+                Bienvenido a PAWsitive!
+            </div>
+        </div>
+        <h1>PAWsitive</h1>
+        <form action="/submit-your-form-handler" method="post">
+            <div class="form-container">
+                <div class="input-container">
+                    <label class="label" for="username">Nombre:</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="input-container">
+                    <label class="label" for="correo">Correo:</label>
+                    <input type="text" id="correo" name="correo" required>
+                </div>
+                <div class="input-container">
+                    <label class="label" for="password">Contraseña:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="button-between">
+                    <button id="registro" class="arrow-button" type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="#E0F4F1">
+                            <path d="M10 17l5-5-5-5v10z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        document.getElementById('registro').addEventListener('click', function(event) {
+            event.preventDefault();  // Evita que el formulario se envíe de forma tradicional
+
+            const username = document.getElementById('username').value;
+            const correo = document.getElementById('correo').value;
+            const password = document.getElementById('password').value;
+
+            // Validar los campos del formulario
+            if (!username || !correo || !password) {
+                alert("Por favor, completa todos los campos.");
+                return;
+            }
+
+            // Enviar los datos al API Gateway para registrar el usuario
+            fetch('http://localhost:3000/api/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: username, email: correo, password: password })
+            })
+            .then(response => response.json())  // Convertir la respuesta en formato JSON
+            .then(data => {
+                if (data.success) {
+                    alert("Usuario registrado con éxito");
+                    window.location.href = "/pantallaInicio";  // Redirigir a la pantalla de inicio
+                } else {
+                    alert("Error al registrar usuario: " + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("Hubo un problema al intentar registrar el usuario.");
+            });
+        });
+    </script>
+</body>
+</html>
