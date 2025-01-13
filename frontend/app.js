@@ -21,8 +21,20 @@ app.get('/calendario', (req, res) => {
     res.sendFile(path.join(__dirname, 'templates', 'calendario.html'));
 });
 
-app.get('/mascota', (req, res) => {
+app.get('/mascotas', (req, res) => {
     res.sendFile(path.join(__dirname, 'templates', 'mascota.html'));
+});
+
+app.get('/mascota', (req, res) => {
+    res.sendFile(path.join(__dirname, 'templates', 'ensenarMascota.html'));
+});
+
+app.get('/crearMascota', (req, res) => {
+    res.sendFile(path.join(__dirname, 'templates', 'crearMascota.html'));
+});
+
+app.get('/crearEvento', (req,res)=> {
+    res.sendFile(path.join(__dirname, 'templates', 'crearEvento.html'));
 });
 
 // Configurar el puerto

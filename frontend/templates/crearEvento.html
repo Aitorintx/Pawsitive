@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuevo Evento</title>
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+    <div class="new-event-container">
+        <div class="event-header">
+            <button class="back-button-event" id="back-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="#E0F4F1">
+                    <path d="M14 7l-5 5 5 5V7z"/>
+                </svg>
+            </button> 
+            <h1 class="page-title-event">Nuevo Evento</h1>
+        </div>
+
+        <!-- Formulario para nuevo evento -->
+        <form id="new-event-form">
+            <div class="form-item">
+                <label for="event-type"><strong>Nombre del Evento</strong></label>
+                <select id="event-type" name="event-type" required>
+                    <option value="Vacuna">Vacuna</option>
+                    <option value="Visita Veterinaria">Visita Veterinaria</option>
+                    <option value="Operación">Operación</option>
+                    <option value="Comida">Comida</option>
+                </select>
+            </div>
+
+            <div class="form-item">
+                <label for="event-date"><strong>Fecha y Hora</strong></label>
+                <input type="datetime-local" id="event-date" name="event-date" required>
+            </div>
+
+            <div class="form-item">
+                <label for="mascota"><strong>Mascota</strong></label>
+                <select id="mascota" name="mascota" required>
+                    <!-- Las opciones se llenarán dinámicamente con las mascotas -->
+                </select>
+            </div>
+
+            <div class="form-item">
+                <button class="button-event" type="submit" id="submit-button">Añadir</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="static/js/events.js"></script>
+</body>
+</html>

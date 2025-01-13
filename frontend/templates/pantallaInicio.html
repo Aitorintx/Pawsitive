@@ -42,7 +42,7 @@
                 .then(html => {
                     const contenedorElemento = document.getElementById('app-container');
                     contenedorElemento.innerHTML = html;  // Solo actualiza el contenido dinámico
-                    window.history.pushState({}, '', url);
+                    window.location.href= url;
                 })
                 .catch(error => {
                     console.warn('Error al cargar el contenido:', error);
@@ -55,7 +55,7 @@
         });
 
         document.getElementById('dog-button').addEventListener('click', function() {
-            loadContent('/mascota');  // Ruta para cargar el contenido del perro
+            loadContent('/mascotas');  // Ruta para cargar el contenido del perro
         });
 
         document.getElementById('question-button').addEventListener('click', function() {
@@ -63,6 +63,7 @@
         });
 
         document.getElementById('volver').addEventListener('click', function() {
+            localStorage.removeItem('token');
             loadContent('/');  // Ruta para cargar el contenido de la pregunta
         });
     

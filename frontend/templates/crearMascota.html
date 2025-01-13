@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAWsitive - Editar Mascota</title>
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+    <div class="m-container" id="app-container">
+        <div class="mascota-header">
+            <button class="back-button" id="back-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="#E0F4F1">
+                    <path d="M14 7l-5 5 5 5V7z"/>
+                </svg>
+            </button> 
+            <h1 class="page-title">Editar Mascota</h1>
+        </div>
+
+        <!-- Formulario para editar la mascota -->
+        <div class="ficha-container">
+            <form id="mascota-form">
+                <img src="static/images/grupo.png" alt="Mascota" class="mascota-img">
+                <div class="item">
+                    <label for="nombre"><strong>NOMBRE:</strong></label>
+                    <input type="text" id="nombre" name="nombre" required>
+                </div>
+                <div class="item">
+                    <label for="raza"><strong>RAZA:</strong></label>
+                    <input type="text" id="raza" name="raza" required>
+                </div>
+                <div class="item">
+                    <label for="fecha-nacimiento"><strong>FECHA NACIMIENTO:</strong></label>
+                    <input type="date" id="fecha-nacimiento" name="fecha-nacimiento" required>
+                </div>
+
+                <!-- Botón de enviar -->
+                <button type="submit" class="submit-button" id="submit-button">Guardar Cambios</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.getElementById('submit-button').addEventListener('click', function(event) {
+            event.preventDefault();  // Evita que el formulario se envíe de forma tradicional
+            console.log(localStorage.getItem('authToken'))
+            const nombre = document.getElementById('nombre').value;
+            const raza = document.getElementById('raza').value;
+            const fecha_nacimiento = document.getElementById('fecha-nacimiento').value;
+
+            // Validar los campos del formulario
+            if (!nombre || !raza || !fecha_nacimiento) {
+                alert("Por favor, completa todos los campos.");
+                return;
+            }
+            
+
+            // Enviar los datos al API Gateway para registrar el usuario
+            fetch('http://localhost:3000/api/regMascota', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem("authToken")
+                 },
+                body: JSON.stringify({ nombre: nombre, raza: raza, fecha_nacimiento:fecha_nacimiento })
+            })
+            .then(response => response.json())  // Convertir la respuesta en formato JSON
+            .then(data => {
+                if (data.success) {
+                    alert("Nueva Mascota en la Familia!");
+                    window.location.href = "/mascotas";  // Redirigir a la pantalla de inicio
+                } else {
+                    alert("Error al registrar mascota: " + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("Hubo un problema al intentar registrar el usuario.");
+            });
+        });
+
+        document.getElementById('back-button').addEventListener('click', function() {
+            fetch('/mascota')  // Realiza la solicitud a la ruta de registro
+                .then(response => response.text())  // Recibe el contenido de la página
+                .then(html => {
+                    // Inserta el contenido de registro.html en el contenedor
+                    const contenedorElemento = document.getElementById('app-container');
+                    if (contenedorElemento){
+                        contenedorElemento.innerHTML = '';  // Borra el contenido anterior
+                        contenedorElemento.innerHTML = html;
+                        localStorage.removeItem('selectedMascota');
+                        window.location.href='/mascotas';
+                    }
+                    
+                })
+                .catch(error => {
+                    console.warn('Error al cargar el template:', error);
+                });
+        });
+    </script>
+</body>
+</html>

@@ -212,10 +212,9 @@ button {
 }
 
 .calendar-container {
-    background-color: #fff;
+    background-color: #fce4ec;
     border-radius: 15px;
     padding: 20px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
     max-width: 600px;
     width: 100%;
 }
@@ -313,3 +312,292 @@ h2 {
     background-color: #45a049;
 }
 
+.page-title {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    color: #deeaec;
+}
+
+.mascotas-container {
+    display: flex;
+    flex-direction: column;  /* Asegura que las cartas se apilen verticalmente */
+    overflow-y: auto;        /* Habilita el scroll solo en el eje Y (vertical) */
+    height: 200px;      /* Define una altura máxima para el contenedor */
+    padding: 20px;
+    width: 100%;
+}
+
+.mascota-card {
+    flex: 0 0 100%;
+    width: 90%; /* Aumenta el ancho de las tarjetas */
+    height: 100%; /* Reduce la altura de las tarjetas */
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    object-fit: cover;
+    position: relative; /* Necesario para posicionar el texto dentro del contenedor */
+    overflow: hidden;
+    margin-bottom: 15px; /* Añadir espacio entre las tarjetas */
+}
+
+.mascota-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ajusta la imagen para que cubra todo el contenedor */
+    position: absolute; /* Hace que la imagen se quede fija dentro del contenedor */
+    top: 0;
+    left: 0;
+}
+
+.mascota-name {
+    position: absolute; /* Para posicionarlo en el centro de la imagen */
+    bottom: 60px; /* Ajusta esta distancia para mover el texto hacia arriba o abajo */
+    left: 45%;
+    transform: translateX(-50%); /* Esto centra el texto en el eje horizontal */
+    color: white; /* Color blanco para el texto */
+    font-size: 30px; /* Ajusta el tamaño de la fuente */
+    font-weight: bold; /* Puedes agregar negrita para que se vea más destacado */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Agrega sombra al texto para hacerlo más visible */
+}
+
+/* Botón para añadir mascota */
+.add-button-container {
+    margin-top: 20px;
+}
+
+.add-button {
+    font-size: 100px;  /* Tamaño más grande */
+    background-color: transparent;
+    border: none;
+    color: #97b8a5;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 50%;
+}
+.back-button {
+    background-color: transparent;
+    position: absolute;
+    left: 15px;
+    border: none;
+    font-size: 28px;
+    margin-right: 20px;
+    cursor: pointer;
+    color: #deeaec;
+}
+
+/* Estilo para la barra de encabezado */
+.mascota-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #97b8a5; /* Fondo compartido */
+    width: 100%;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+.m-container {
+    width: 380px; /* Ancho del contenedor */
+    background: #fce4ec; /* Fondo blanco para el formulario */
+    padding: 20px; /* Espaciado interno */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 2px 10px rgba(255, 255, 255, 0); /* Sin sombra */
+    text-align: center; /* Centrado de texto */
+    flex-direction: column;
+}
+
+/* Estilo para el contenedor del mensaje cuando no hay mascotas */
+.no-mascotas-message {
+    text-align: center; /* Centra el contenido */
+    font-size: 18px;
+    font-weight: 500;
+    color: #97b8a5; /* Color de texto sutil */
+    margin-top: 30px;
+}
+
+/* Estilo para la imagen debajo del mensaje */
+.no-mascotas-image {
+    margin-top: 20px; /* Espacio entre el texto y la imagen */
+    width: 70px; /* Tamaño de la imagen */
+    height: auto;
+    display: block; /* Hace que la imagen se muestre como un bloque */
+    margin-left: auto; /* Centra la imagen horizontalmente */
+    margin-right: auto; /* Centra la imagen horizontalmente */
+}
+
+/* Si deseas modificar la fuente del mensaje */
+.no-mascotas-message p {
+    font-size: 22px; /* Ajusta el tamaño del texto */
+    color: #97b8a5;  /* Un color suave para el texto */
+    font: bold;
+}
+
+.mascota-img {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
+}
+
+.ficha-container {
+    text-align: center;
+}
+
+.ficha-container .item {
+    font-size: 18px;
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+.ficha-container .item span {
+    font-weight: normal;
+}
+
+.submit-button {
+    background-color: #97b8a5;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.submit-button:hover {
+    background-color: #84a68f;
+}
+
+.event-list {
+    background-color: #f0f4f4; /* Fondo más claro */
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    border: 1px solid #ccc; /* Línea más suave alrededor del contenedor */
+}
+
+/* Cambiar color del título "Eventos Este Mes" */
+.event-list h3 {
+    color: #62B9B7; /* Un color suave y armonioso con el esquema */
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Estilo para la lista de eventos */
+#event-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+#event-list li {
+    background-color: #ffffff; /* Fondo blanco para cada evento */
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #d3d3d3; /* Líneas más claras */
+    border-radius: 5px;
+}
+
+/* Agregar un color más suave para las líneas */
+#event-list li:not(:last-child) {
+    border-bottom: 1px solid #e0e0e0; /* Líneas suaves entre eventos */
+}
+
+/* Estilo para los iconos */
+#event-list li .event-icon {
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+/* Mejorar la apariencia del texto */
+#event-list li strong {
+    color: #333; /* Color de texto más oscuro para la fecha y el nombre del animal */
+    font-weight: normal;
+}
+
+/* Estilo para el color de los íconos y los tipos de recordatorio */
+#event-list li.vacuna {
+    border-left: 5px solid #00BFFF; /* Azul claro */
+}
+
+#event-list li.visita-veterinaria {
+    border-left: 5px solid #FFA500; /* Naranja para visita veterinaria */
+}
+
+#event-list li.comida {
+    border-left: 5px solid #FF6347; /* Rojo tomate para comida */
+}
+
+#event-list li.operacion {
+    border-left: 5px solid #8A2BE2; /* Púrpura para operación */
+}
+
+.new-event-container {
+    background-color: #f8f8f8;
+    border-radius: 10px;
+    padding: 20px;
+    width: 400px;
+    margin: 30px auto;
+}
+
+.event-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.page-title-event {
+    font-size: 24px;
+    font-weight: bold;
+    color: #62B9B7;
+    text-align: center;
+    position:relative
+}
+
+.back-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+form {
+    margin-top: 20px;
+}
+
+.form-item {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+select, input {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.button-event {
+    width: 100%;
+    padding: 10px;
+    background-color: #62B9B7;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.button-event:hover {
+    background-color: #4c9e96;
+}

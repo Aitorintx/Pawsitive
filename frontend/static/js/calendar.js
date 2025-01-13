@@ -1,28 +1,22 @@
-// Variables para el calendario
-let currentDate = new Date(); // Fecha actual
+let currentDate = new Date(); 
 
 
 
-// Función para generar el calendario para el mes y año actuales
 function generateCalendar() {
     const monthName = document.getElementById('month-name');
     const calendarDates = document.getElementById('calendar-dates');
     const eventList = document.getElementById('event-list');
 
-    // Obtener el primer día del mes actual
     const firstDay = new Date(Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), 0));
     const lastDay = new Date(Date.UTC(currentDate.getFullYear(), currentDate.getMonth() + 1, 0));
     const daysInMonth = lastDay.getDate();
     const startDay = firstDay.getUTCDay(); 
     
-    // Actualizar el nombre del mes
     const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
     monthName.innerText = `${months[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
     
-    // Limpiar fechas previas
     calendarDates.innerHTML = '';
     
-    // Generar los días en blanco antes de que inicie el mes
     for (let i = 0; i < startDay; i++) {
         calendarDates.innerHTML += '<div class="calendar-date"></div>';
     }
@@ -35,36 +29,114 @@ function generateCalendar() {
         dateElement.setAttribute('data-date', `${day}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`);
         calendarDates.appendChild(dateElement);
     }
-
-    // Mostrar eventos para este mes (simulación con datos estáticos)
-    const events = [
-        { date: '01/01/2025', description: 'Vacuna - 11:30', color: 'blue' },
-        { date: '04/01/2025', description: 'Cita Vet. - 09:30', color: 'orange' }
-    ];
-
-    // Limpiar la lista de eventos
-    eventList.innerHTML = '';
-
-    // Agregar los eventos a la lista
-    events.forEach(event => {
-        const listItem = document.createElement('li');
-        listItem.classList.add('event');
-        listItem.innerHTML = `<span class="event-dot ${event.color}"></span> ${event.description}`;
-        eventList.appendChild(listItem);
-    });
-    
 }
 
-// Funciones para cambiar el mes
+function obtenerEventosDelUsuario() {
+    const token = localStorage.getItem("authToken");  
+    if (!token) {
+        console.error("Token no encontrado");
+        return;
+    }
+
+    
+    fetch('http://localhost:3000/api/eventos', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token // Pasar el token en el encabezado
+        }
+    })
+    .then(response => response.json())  // Convertir la respuesta a JSON
+    .then(data => {
+        const container = document.getElementById('mascotas-container');
+        if (data.message) {
+            container.innerHTML = `
+                <div class="no-mascotas-message">
+                    <p>OUCHHH! No tienes mascotas registradas!</p>
+                    <img src="static/images/perro-triste.png" alt="No mascotas" class="no-mascotas-image">
+                </div>`;
+        } else {
+            const eventListContainer = document.getElementById('event-list'); // El contenedor de la lista de eventos
+
+            
+            eventListContainer.innerHTML = '';
+
+            const currentDate = new Date();
+            const currentDateString = currentDate.toISOString().split('T')[0]; 
+
+        
+            const upcomingEvents = data.filter(evento => evento.fecha >= currentDateString);
+
+            upcomingEvents.forEach(evento => {
+                const eventoListItem = document.createElement('li');
+                const hora=formatTime(evento.hora)
+                let icon = '';
+                let color = '';
+                if (evento.tipo_recordatorio === 'Vacuna') {
+                    icon = '💉'; 
+                    color = 'blue'; 
+                } else if (evento.tipo_recordatorio === 'Visita Veterinaria') {
+                    icon = '🐾'; 
+                    color = 'orange'; 
+                } else if (evento.tipo_recordatorio === 'Operación') {
+                    icon = '🔪'; 
+                    color = 'red'; 
+                } else if (evento.tipo_recordatorio === 'Comida') {
+                    icon = '🍖'; 
+                    color = 'green'; 
+                }
+
+                
+                eventoListItem.innerHTML = `
+                    <span style="color: ${color};">${icon}</span>
+                    <strong>${evento.fecha}</strong> - 
+                    <strong>${evento.tipo_recordatorio}</strong> - 
+                    <strong>${hora}</strong> - 
+                    <strong>${evento.mascota}</strong>`;
+                
+                eventListContainer.appendChild(eventoListItem);
+            });
+        }
+    })
+    .catch(error => console.error('Error al cargar las eventos:', error));
+}
+
+function formatTime(seconds) {
+    const hours = Math.floor(seconds / 3600); 
+    const minutes = Math.floor((seconds % 3600) / 60); 
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+}
+    
+
+
 document.getElementById('prev-month').addEventListener('click', function() {
     currentDate.setMonth(currentDate.getMonth() - 1);
-    generateCalendar();  // Regenerar el calendario para el mes anterior
+    generateCalendar();  
 });
 
 document.getElementById('next-month').addEventListener('click', function() {
     currentDate.setMonth(currentDate.getMonth() + 1);
-    generateCalendar();  // Regenerar el calendario para el mes siguiente
+    generateCalendar();  
 });
 
-// Inicializar el calendario al cargar la página
-generateCalendar();
+document.getElementById('add-event-button').addEventListener('click', function() {
+    fetch('/crearEvento')  
+        .then(response => response.text())  
+        .then(html => {
+            const contenedorElemento = document.getElementById('app-container');
+            if (contenedorElemento){
+                contenedorElemento.innerHTML = '';  
+                contenedorElemento.innerHTML = html;
+                window.location.href='/crearEvento';
+            }
+            
+        })
+        .catch(error => {
+            console.warn('Error al cargar el template:', error);
+        });
+});
+
+window.onload = () => {
+    generateCalendar();
+    obtenerEventosDelUsuario();
+};

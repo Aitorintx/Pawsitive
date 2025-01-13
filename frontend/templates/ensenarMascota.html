@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAWsitive - Ficha Mascota</title>
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+    <div class="m-container" id="app-container">
+        <div class="mascota-header">
+            <button class="back-button" id="back-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="#E0F4F1">
+                    <path d="M14 7l-5 5 5 5V7z"/>
+                </svg>
+            </button> 
+            <h1 class="page-title">Ficha Mascota</h1>
+        </div>
+
+        <!-- Información de la mascota -->
+        <div class="ficha-container">
+            <img src="static/images/grupo.png" alt="Mascota" class="mascota-img">
+            <div class="item"><strong>NOMBRE: </strong><span id="nombre"></span></div>
+            <div class="item"><strong>RAZA: </strong><span id="raza"></span></div>
+            <div class="item"><strong>FECHA NACIMIENTO: </strong><span id="fecha-nacimiento"></span></div>
+
+        </div>
+    </div>
+    <script>
+        function loadMascotaDetails() {
+            const mascota = JSON.parse(localStorage.getItem('selectedMascota'));  // Obtener la mascota seleccionada
+
+            if (!mascota) {
+                console.error("No se encontró la mascota en localStorage");
+                return;
+            }
+
+            document.getElementById('nombre').textContent = mascota.Nombre;
+            document.getElementById('raza').textContent = mascota.Raza;
+            document.getElementById('fecha-nacimiento').textContent = mascota.Fecha_Nacimiento;
+        }
+
+        // Llamar la función cuando la página se haya cargado
+        window.onload = loadMascotaDetails;
+
+        document.getElementById('back-button').addEventListener('click', function() {
+            fetch('/mascota')  // Realiza la solicitud a la ruta de registro
+                .then(response => response.text())  // Recibe el contenido de la página
+                .then(html => {
+                    // Inserta el contenido de registro.html en el contenedor
+                    const contenedorElemento = document.getElementById('app-container');
+                    if (contenedorElemento){
+                        contenedorElemento.innerHTML = '';  // Borra el contenido anterior
+                        contenedorElemento.innerHTML = html;
+                        localStorage.removeItem('selectedMascota');
+                        window.location.href='/mascotas';
+                    }
+                    
+                })
+                .catch(error => {
+                    console.warn('Error al cargar el template:', error);
+                });
+        });
+
+    </script>
+    
+
+</body>
+</html>

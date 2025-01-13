@@ -3,39 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PAWsitive - InicioSes</title>
-    <link rel="stylesheet" href='static/css/style.css'>
+    <title>PAWsitive - Mascotas</title>
+    <link rel="stylesheet" href="static/css/style.css">
 </head>
 <body>
-    <div class="container" id="app-container">
-        <img src="static/images/perro.png" alt="PAWsitive Logo">
-        <h1>PAWsitive</h1>
-        <form action="/submit-your-form-handler" method="post">
-            <div class="form-container">
-                <div class="input-container">
-                    <label class="label" for="username">Nombre:</label>
-                    <input type="text" id="username" name="username" required>
-                </div>
-                <div class="input-container">
-                    <label class="label" for="password">Contraseña:</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                <div class="button-between">
-                    <button class="arrow-button" type="button">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="#E0F4F1">
-                            <path d="M10 17l5-5-5-5v10z"/>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            <div class="button-container">
-                <button id="registrarse-btn" type="button">Registrarse</button>  
-            </div>
-        </form>
+    <div class="m-container" id="app-container">
+        <div class="mascota-header">
+            <button class="back-button" id="back-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="#E0F4F1">
+                    <path d="M14 7l-5 5 5 5V7z"/>
+                </svg>
+            </button> 
+            <h1 class="page-title">Mascotas</h1>
+        </div>
+
+        <!-- Contenedor de las mascotas -->
+        <div class="mascotas-container" id="mascotas-container">
+        </div>
+
+        <!-- Botón para agregar nueva mascota -->
+        <div class="add-button-container">
+            <button class="add-button" id="add-button">+</button>
+        </div>
     </div>
+
     <script>
-        document.getElementById('registrarse-btn').addEventListener('click', function() {
-            fetch('/registro')  // Realiza la solicitud a la ruta de registro
+        
+    
+    
+        // Cargar las mascotas desde el backend
+        function loadMascotas() {
+            const token = localStorage.getItem("authToken");  // Obtener el token de localStorage
+            if (!token) {
+                console.error("Token no encontrado");
+                return;
+            }
+    
+            fetch('http://localhost:3000/api/mascotas', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem("authToken")  // Pasar el token en el encabezado
+                }
+            }) // API Gateway
+            .then(response => response.json())  // Convertir la respuesta a JSON
+            .then(data => {
+                const container = document.getElementById('mascotas-container');
+                container.innerHTML = '';
+                // Verificar si hay un mensaje (cuando no hay mascotas)
+                if (data.message) {
+                    container.innerHTML = `
+                        <div class="no-mascotas-message">
+                            <p>OUCHHH! No tienes mascotas registradas!</p>
+                            <img src="static/images/perro-triste.png" alt="No mascotas" class="no-mascotas-image">
+                        </div>
+`;
+                } else {
+                    // Mostrar las mascotas
+                    data.forEach(mascota => {
+                        const mascotaCard = document.createElement('div');
+                        mascotaCard.classList.add('mascota-card');
+                        mascotaCard.innerHTML = `
+                            <img src="static/images/fondo-mascota.jpg" alt="${mascota.Nombre}" class="mascota-image">
+                            <p class="mascota-name">${mascota.Nombre}</p>`;
+                            mascotaCard.addEventListener('click', function() {
+                            localStorage.setItem('selectedMascota', JSON.stringify(mascota));
+                            window.location.href = `/mascota`; // Usar el ID de la mascota en la URL
+                        });
+                        container.appendChild(mascotaCard);
+                    });
+                }
+            })
+            .catch(error => console.error('Error al cargar las mascotas:', error));
+        }
+    
+        // Llamar la función para cargar las mascotas al cargar la página
+        window.onload = loadMascotas;
+
+        document.getElementById('back-button').addEventListener('click', function() {
+            fetch('/pantallaInicio')  // Realiza la solicitud a la ruta de registro
                 .then(response => response.text())  // Recibe el contenido de la página
                 .then(html => {
                     // Inserta el contenido de registro.html en el contenedor
@@ -43,7 +89,25 @@
                     if (contenedorElemento){
                         contenedorElemento.innerHTML = '';  // Borra el contenido anterior
                         contenedorElemento.innerHTML = html;
-                        window.history.pushState({}, '', '/registro');
+                        window.location.href='/pantallaInicio';
+                    }
+                    
+                })
+                .catch(error => {
+                    console.warn('Error al cargar el template:', error);
+                });
+        });
+
+        document.getElementById('add-button').addEventListener('click', function() {
+            fetch('/crearMascota')  // Realiza la solicitud a la ruta de registro
+                .then(response => response.text())  // Recibe el contenido de la página
+                .then(html => {
+                    // Inserta el contenido de registro.html en el contenedor
+                    const contenedorElemento = document.getElementById('app-container');
+                    if (contenedorElemento){
+                        contenedorElemento.innerHTML = '';  // Borra el contenido anterior
+                        contenedorElemento.innerHTML = html;
+                        window.location.href='/crearMascota';
                     }
                     
                 })
@@ -52,5 +116,6 @@
                 });
         });
     </script>
+    
 </body>
 </html>

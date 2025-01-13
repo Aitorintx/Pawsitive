@@ -56,6 +56,9 @@
             .then(data => {
                 if (data.success) {
                     // Si el login es exitoso, redirigir a otra página o mostrar mensaje de éxito
+                    localStorage.setItem('authToken', data.token)
+                    const token=localStorage.getItem('authToken')
+                    console.log(token);
                     alert("Inicio de sesión exitoso");
                     window.location.href = "/pantallaInicio";  // Redirigir a la página de inicio
                 } else {
