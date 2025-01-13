@@ -64,8 +64,8 @@
                         const mascotaCard = document.createElement('div');
                         mascotaCard.classList.add('mascota-card');
                         mascotaCard.innerHTML = `
-                            <img src="static/images/fondo-mascota.jpg" alt="${mascota.Nombre}" class="mascota-image">
-                            <p class="mascota-name">${mascota.Nombre}</p>`;
+                            <img src="static/images/fondo-mascota.jpg" alt="${mascota.nombre}" class="mascota-image">
+                            <p class="mascota-name">${mascota.nombre}</p>`;
                             mascotaCard.addEventListener('click', function() {
                             localStorage.setItem('selectedMascota', JSON.stringify(mascota));
                             window.location.href = `/mascota`; // Usar el ID de la mascota en la URL

@@ -19,8 +19,8 @@ function obtenerMascotas() {
         
         data.forEach(mascota => {
             const option = document.createElement('option');
-            option.value = mascota.Nombre;  
-            option.textContent = mascota.Nombre;  
+            option.value = mascota.nombre;  
+            option.textContent = mascota.nombre;  
             mascotaSelect.appendChild(option);
         });
     })

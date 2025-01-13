@@ -10,11 +10,13 @@ app = FastAPI()
 
 SECRET_KEY = "mysecretkey"
 
+
+
 # Conexión a la base de datos
 def get_db_connection():
     try:
         connection = mysql.connector.connect(
-            host="localhost",        # Tu host (por defecto es localhost)
+            host="mysql",           # Tu host (por defecto es localhost)
             user="root",             # Tu usuario de MySQL
             password="deusto",       # Tu contraseña de MySQL
             database="pawsitive_db"  # El nombre de tu base de datos
@@ -23,6 +25,94 @@ def get_db_connection():
             return connection
     except Error as e:
         raise HTTPException(status_code=500, detail=f"Error de conexión con la base de datos: {e}")
+    
+def init_db():
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    # Crear tabla de usuarios (si no existe)
+    create_users_table = """
+    CREATE TABLE IF NOT EXISTS usuarios (
+        id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+        nombre VARCHAR(255) NOT NULL,
+        correo VARCHAR(255) NOT NULL UNIQUE,
+        contrasena VARCHAR(255) NOT NULL
+    );
+    """
+    cursor.execute(create_users_table)
+
+    # Crear tabla de mascotas (si no existe)
+    create_pets_table = """
+    CREATE TABLE IF NOT EXISTS mascotas (
+        id_mascota INT AUTO_INCREMENT PRIMARY KEY,
+        id_usuario INT NOT NULL,
+        nombre VARCHAR(255) NOT NULL,
+        raza VARCHAR(255) NOT NULL,
+        fecha_nacimiento DATE NOT NULL,
+        FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+    );
+    """
+    cursor.execute(create_pets_table)
+
+    # Crear tabla de eventos (si no existe)
+    create_events_table = """
+    CREATE TABLE IF NOT EXISTS eventos (
+        id_evento INT AUTO_INCREMENT PRIMARY KEY,
+        id_mascota INT NOT NULL,
+        tipo_recordatorio VARCHAR(255) NOT NULL,
+        fecha DATE NOT NULL,
+        hora DATETIME NOT NULL,
+        FOREIGN KEY (id_mascota) REFERENCES mascotas(id_mascota)
+    );
+    """
+    cursor.execute(create_events_table)
+
+    connection.commit()  # Guardar cambios
+    cursor.close()
+    connection.close()
+
+def insert_initial_data():
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    # Verificar si la tabla de usuarios tiene datos
+    cursor.execute("SELECT COUNT(*) FROM usuarios")
+    result = cursor.fetchone()
+    if result[0] == 0:  # Si no hay usuarios, insertar datos
+        insert_user = """
+        INSERT INTO usuarios (nombre, correo, contrasena) 
+        VALUES (%s, %s, %s)
+        """
+        cursor.execute(insert_user, ('admin', 'admin@pawsitive.com', 'admin123'))
+    
+    # Insertar mascotas predeterminadas si no existen
+    cursor.execute("SELECT COUNT(*) FROM mascotas")
+    result = cursor.fetchone()
+    if result[0] == 0:  # Si no hay mascotas, insertar datos
+        insert_pet = """
+        INSERT INTO mascotas (id_usuario, nombre, raza, fecha_nacimiento) 
+        VALUES (%s, %s, %s, %s)
+        """
+        cursor.execute(insert_pet, (1, 'Fido', 'Perro', '2022-01-01'))
+
+    # Insertar eventos predeterminados si no existen
+    cursor.execute("SELECT COUNT(*) FROM eventos")
+    result = cursor.fetchone()
+    if result[0] == 0:  # Si no hay eventos, insertar datos
+        insert_event = """
+        INSERT INTO eventos (id_mascota, tipo_recordatorio, fecha, hora) 
+        VALUES (%s, %s, %s, %s)
+        """
+        cursor.execute(insert_event, (1, 'Vacunación', '2025-02-01', '10:00:00'))
+
+    connection.commit()  # Guardar cambios
+    cursor.close()
+    connection.close()
+
+@app.on_event("startup")
+def startup():
+    init_db()  # Crear tablas si no existen
+    insert_initial_data()
     
 
 
@@ -133,7 +223,6 @@ async def register(request: RegisterRequest):
 
 @app.get("/api/mascotas")
 async def obtener_mascotas(user_id: str = Depends(get_current_user)):
-    user_id=int(user_id)
     connection = get_db_connection()
     cursor = connection.cursor(dictionary=True)
 
@@ -157,7 +246,7 @@ async def registrar_mascota(request: MascotaRequest, user_id: str = Depends(get_
         connection = get_db_connection()
         cursor = connection.cursor(dictionary=True)
 
-        query = "INSERT INTO Mascotas (ID_Usuario, Nombre, Raza, Fecha_Nacimiento) VALUES (%s,%s,%s,%s)"
+        query = "INSERT INTO mascotas (ID_Usuario, Nombre, Raza, Fecha_Nacimiento) VALUES (%s,%s,%s,%s)"
         cursor.execute(query, (user_id, nombre, raza,fecha_nacimiento))
         connection.commit()
 
@@ -184,8 +273,8 @@ async def obtener_eventos(user_id: str = Depends(get_current_user)):
     
     query = """
         SELECT e.Tipo_Recordatorio, e.Fecha, e.Hora, m.Nombre 
-        FROM Eventos e 
-        JOIN Mascotas m ON e.ID_Mascota = m.ID_Mascota 
+        FROM eventos e 
+        JOIN mascotas m ON e.id_mascota = m.id_mascota 
         WHERE m.ID_Usuario = %s
     """
     cursor.execute(query, (user_id,))
@@ -227,14 +316,14 @@ async def registrar_mascota(request: EventoRequest, user_id: str = Depends(get_c
         connection = get_db_connection()
         cursor = connection.cursor(dictionary=True)
 
-        query= "SELECT ID_Mascota from Mascotas WHERE ID_Usuario=%s && Nombre=%s"
+        query= "SELECT id_mascota from mascotas WHERE ID_Usuario=%s && Nombre=%s"
         cursor.execute(query, (user_id,mascota))
         id_mascota= cursor.fetchone()
         if not id_mascota:
             raise HTTPException(status_code=404, detail="No se encontró la mascota para este usuario")
         id_mascota = id_mascota["ID_Mascota"]
 
-        query = "INSERT INTO EVENTOS (ID_Mascota, Tipo_Recordatorio, Fecha, Hora) VALUES (%s,%s,%s,%s)"
+        query = "INSERT INTO eventos (id_mascota, Tipo_Recordatorio, Fecha, Hora) VALUES (%s,%s,%s,%s)"
         cursor.execute(query, (id_mascota, evento, fecha,hora))
         connection.commit()
 

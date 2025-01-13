@@ -17,7 +17,7 @@ app.post('/api/login', async (req, res) => {
 
     try {
         // Realizamos una solicitud POST al microservicio FastAPI
-        const response = await axios.post('http://localhost:5000/api/login', { username, password });
+        const response = await axios.post('http://flask_backend:5000/api/login', { username, password });
 
         if (response.data.success) {
             // Si el login es exitoso
@@ -37,7 +37,7 @@ app.post('/api/register', async (req, res) => {
 
     try {
         // Enviar solicitud POST a FastAPI para registrar un nuevo usuario
-        const response = await axios.post('http://localhost:5000/api/register', { username, password, email });
+        const response = await axios.post('http://flask_backend:5000/api/register', { username, password, email });
 
         // Enviar respuesta al frontend
         res.json(response.data);
@@ -51,7 +51,7 @@ app.get('/api/mascotas', async (req, res) => {
     const token = req.headers['authorization']; // Obtener el token del encabezado
     try {
         // Enviar la solicitud al backend (FastAPI) para obtener las mascotas
-        const response = await axios.get('http://localhost:5000/api/mascotas', {
+        const response = await axios.get('http://flask_backend:5000/api/mascotas', {
             headers: {
                 'Authorization': token  // Pasar el token en el encabezado
             }
@@ -71,7 +71,7 @@ app.post('/api/regMascota', async (req, res) => {
 
     try {
         // Enviar solicitud POST a FastAPI para registrar un nuevo usuario
-        const response = await axios.post('http://localhost:5000/api/regMascota',{ nombre, raza, fecha_nacimiento },  {
+        const response = await axios.post('http://flask_backend:5000/api/regMascota',{ nombre, raza, fecha_nacimiento },  {
             headers: {
                 'Authorization': token  // Pasar el token en el encabezado
             }
@@ -89,7 +89,7 @@ app.get('/api/eventos', async (req, res) => {
     const token = req.headers['authorization']; // Obtener el token del encabezado
     try {
         // Enviar la solicitud al backend (FastAPI) para obtener las mascotas
-        const response = await axios.get('http://localhost:5000/api/eventos', {
+        const response = await axios.get('http://flask_backend:5000/api/eventos', {
             headers: {
                 'Authorization': token  // Pasar el token en el encabezado
             }
@@ -109,7 +109,7 @@ app.post('/api/regEvento', async (req, res) => {
 
     try {
         // Enviar solicitud POST a FastAPI para registrar un nuevo usuario
-        const response = await axios.post('http://localhost:5000/api/regEvento',{ evento, fechaHora, mascota },  {
+        const response = await axios.post('http://flask_backend:5000/api/regEvento',{ evento, fechaHora, mascota },  {
             headers: {
                 'Authorization': token  // Pasar el token en el encabezado
             }

@@ -1,0 +1,100 @@
+version: "3.8"
+
+services:
+  # Servicio para el backend de Flask
+  flask_backend:
+    build:
+      context: ./backend/flask-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=development
+      - MYSQL_HOST=mysql  # Dirección del servicio MySQL dentro de Docker
+      - MYSQL_USER=root   # Usuario de MySQL
+      - MYSQL_PASSWORD=deusto  # Contraseña de MySQL
+      - MYSQL_DATABASE=pawsitive_db  # Base de datos a usar
+    volumes:
+      - ./backend/flask-backend:/app
+    networks:
+      - backend-network
+    depends_on:
+      - mysql  # Asegura que MySQL se inicie antes de Flask
+
+  # Servicio para el backend de Node.js
+  node_backend:
+    build:
+      context: ./backend/node-backend
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+      - MONGO_URI=mongodb://mongo:27017  # Conexión a MongoDB
+    volumes:
+      - ./backend/node-backend:/app
+    networks:
+      - backend-network
+    depends_on:
+      - mongo  # Asegura que MongoDB se inicie antes de Node.js
+
+  # Servicio para el frontend
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./frontend:/app
+    networks:
+      - frontend-network
+    depends_on:
+      - api_gateway  # Asegura que el API Gateway se inicie antes de Frontend
+
+  # Servicio para el API Gateway
+  api_gateway:
+    build:
+      context: ./api_gateway
+    ports:
+      - "3000:3000"
+    networks:
+      - frontend-network
+      - backend-network
+    depends_on:
+      - flask_backend
+      - node_backend  # El API Gateway depende de los backends
+
+  # Servicio para la base de datos MySQL
+  mysql:
+    image: mysql:8.0  # Usamos la imagen oficial de MySQL
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: "deusto"  # Contraseña para el usuario root
+      MYSQL_DATABASE: "pawsitive_db"  # Base de datos inicial
+    ports:
+      - "3307:3306"  # Mapea el puerto de MySQL al puerto 3306 en tu máquina
+    volumes:
+      - mysql-data:/var/lib/mysql  # Volumen persistente para la base de datos
+    networks:
+      - backend-network
+
+  # Servicio para la base de datos MongoDB
+  mongo:
+    image: mongo:latest  # Usamos la imagen oficial de MongoDB
+    container_name: mongo-db
+    ports:
+      - "27017:27017"  # Mapea el puerto de MongoDB al puerto 27017
+    volumes:
+      - mongo-data:/data/db  # Volumen persistente para MongoDB
+    networks:
+      - backend-network
+
+# Volúmenes para persistir los datos
+volumes:
+  mysql-data:
+    driver: local
+  mongo-data:
+    driver: local
+
+# Redes para la separación de los servicios
+networks:
+  frontend-network:
+  backend-network:

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 // Conexión a MongoDB
-mongoose.connect('mongodb://localhost:27017/adopcionAnimales', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb://mongo-db:27017/adopcionAnimales', { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Conectado a MongoDB'))
   .catch((err) => console.error('Error de conexión a MongoDB:', err));
 
