@@ -45,7 +45,7 @@ app.get('/fichaTecnica', (req,res)=> {
 
 
 
-// Configurar el puerto
+
 const PORT = 8000;
 app.listen(PORT, () => {
     console.log(`Servidor de frontend corriendo en http://localhost:${PORT}`);

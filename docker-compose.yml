@@ -1,7 +1,6 @@
 version: "3.8"
 
 services:
-  # Servicio para el backend de Flask
   flask_backend:
     build:
       context: ./backend/flask-backend
@@ -9,18 +8,17 @@ services:
       - "5000:5000"
     environment:
       - FLASK_ENV=development
-      - MYSQL_HOST=mysql  # Dirección del servicio MySQL dentro de Docker
-      - MYSQL_USER=root   # Usuario de MySQL
-      - MYSQL_PASSWORD=deusto  # Contraseña de MySQL
-      - MYSQL_DATABASE=pawsitive_db  # Base de datos a usar
+      - MYSQL_HOST=mysql  
+      - MYSQL_USER=root   
+      - MYSQL_PASSWORD=deusto  
+      - MYSQL_DATABASE=pawsitive_db  
     volumes:
       - ./backend/flask-backend:/app
     networks:
       - backend-network
     depends_on:
-      - mysql  # Asegura que MySQL se inicie antes de Flask
+      - mysql  
 
-  # Servicio para el backend de Node.js
   node_backend:
     build:
       context: ./backend/node-backend
@@ -28,15 +26,14 @@ services:
       - "3001:3001"
     environment:
       - NODE_ENV=development
-      - MONGO_URI=mongodb://mongo:27017  # Conexión a MongoDB
+      - MONGO_URI=mongodb://mongo:27017 
     volumes:
       - ./backend/node-backend:/app
     networks:
       - backend-network
     depends_on:
-      - mongo  # Asegura que MongoDB se inicie antes de Node.js
+      - mongo  
 
-  # Servicio para el frontend
   frontend:
     build:
       context: ./frontend
@@ -47,9 +44,8 @@ services:
     networks:
       - frontend-network
     depends_on:
-      - api_gateway  # Asegura que el API Gateway se inicie antes de Frontend
+      - api_gateway  
 
-  # Servicio para el API Gateway
   api_gateway:
     build:
       context: ./api_gateway
@@ -60,41 +56,40 @@ services:
       - backend-network
     depends_on:
       - flask_backend
-      - node_backend  # El API Gateway depende de los backends
+      - node_backend  
 
-  # Servicio para la base de datos MySQL
+
   mysql:
-    image: mysql:8.0  # Usamos la imagen oficial de MySQL
+    image: mysql:8.0  
     container_name: mysql-db
     environment:
-      MYSQL_ROOT_PASSWORD: "deusto"  # Contraseña para el usuario root
-      MYSQL_DATABASE: "pawsitive_db"  # Base de datos inicial
+      MYSQL_ROOT_PASSWORD: "deusto"  
+      MYSQL_DATABASE: "pawsitive_db"  
     ports:
-      - "3307:3306"  # Mapea el puerto de MySQL al puerto 3306 en tu máquina
+      - "3307:3306"  
     volumes:
-      - mysql-data:/var/lib/mysql  # Volumen persistente para la base de datos
+      - mysql-data:/var/lib/mysql  
     networks:
       - backend-network
 
-  # Servicio para la base de datos MongoDB
+  
   mongo:
-    image: mongo:latest  # Usamos la imagen oficial de MongoDB
+    image: mongo:latest 
     container_name: mongo-db
     ports:
-      - "27017:27017"  # Mapea el puerto de MongoDB al puerto 27017
+      - "27017:27017"  
     volumes:
-      - mongo-data:/data/db  # Volumen persistente para MongoDB
+      - mongo-data:/data/db  
     networks:
       - backend-network
 
-# Volúmenes para persistir los datos
+
 volumes:
   mysql-data:
     driver: local
   mongo-data:
     driver: local
 
-# Redes para la separación de los servicios
 networks:
   frontend-network:
   backend-network:

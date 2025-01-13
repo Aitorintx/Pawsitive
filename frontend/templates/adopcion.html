@@ -97,11 +97,9 @@
             li.classList.add('animal-item');
             li.textContent = animal.nombre;
             li.addEventListener('click', () => {
-              // Guardar el animal en localStorage
               localStorage.setItem('animal', JSON.stringify(animal));
 
-              // Redirigir a la página de la ficha técnica
-              window.location.href = '/fichaTecnica'; // Asegúrate de tener esta página
+              window.location.href = '/fichaTecnica'; 
             });
             animalList.appendChild(li);
           });
@@ -113,15 +111,15 @@
       }
     }
 
-    // Llamar a la función para obtener los tipos y estados cuando la página cargue
+
     window.onload = obtenerTiposYEstados;
 
     function loadContent(url) {
             fetch(url)
-                .then(response => response.text()) // Obtiene el HTML de la nueva página
+                .then(response => response.text()) 
                 .then(html => {
                     const contenedorElemento = document.getElementById('app-container');
-                    contenedorElemento.innerHTML = html;  // Solo actualiza el contenido dinámico
+                    contenedorElemento.innerHTML = html;  
                     window.location.href= url;
                 })
                 .catch(error => {

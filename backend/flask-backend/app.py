@@ -197,7 +197,6 @@ async def register(request: RegisterRequest):
     password = request.password
     correo = request.email
 
-    # Verificar que el nombre de usuario no esté ya registrado
     connection = get_db_connection()
     cursor = connection.cursor(dictionary=True)
 
@@ -210,8 +209,6 @@ async def register(request: RegisterRequest):
         connection.close()
         raise HTTPException(status_code=400, detail="El correo de usuario ya existe")
 
-
-    # Insertar el nuevo usuario en la base de datos
     query = "INSERT INTO usuarios (nombre, correo, contrasena) VALUES (%s,%s, %s)"
     cursor.execute(query, (username, correo, password))
     connection.commit()
@@ -286,7 +283,6 @@ async def obtener_eventos(user_id: str = Depends(get_current_user)):
     if not eventos:
         raise HTTPException(status_code=404, detail="No se encontraron eventos para el usuario")
 
-    # Formatear eventos para enviar en la respuesta
     eventos_formateados = [
         {
             "tipo_recordatorio": evento["Tipo_Recordatorio"],
@@ -321,7 +317,7 @@ async def registrar_mascota(request: EventoRequest, user_id: str = Depends(get_c
         id_mascota= cursor.fetchone()
         if not id_mascota:
             raise HTTPException(status_code=404, detail="No se encontró la mascota para este usuario")
-        id_mascota = id_mascota["ID_Mascota"]
+        id_mascota = id_mascota["id_mascota"]
 
         query = "INSERT INTO eventos (id_mascota, Tipo_Recordatorio, Fecha, Hora) VALUES (%s,%s,%s,%s)"
         cursor.execute(query, (id_mascota, evento, fecha,hora))

@@ -90,8 +90,7 @@ function obtenerEventosDelUsuario() {
                 eventoListItem.innerHTML = `
                     <span style="color: ${color};">${icon}</span>
                     <strong>${evento.fecha}</strong> - 
-                    <strong>${evento.tipo_recordatorio}</strong> - 
-                    <strong>${hora}</strong> - 
+                    <strong>${evento.tipo_recordatorio}</strong> -  
                     <strong>${evento.mascota}</strong>`;
                 
                 eventListContainer.appendChild(eventoListItem);
