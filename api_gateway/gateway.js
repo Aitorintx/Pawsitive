@@ -116,9 +116,6 @@ app.post('/api/regEvento', async (req, res) => {
         });
         console.log(response)
         // Enviar respuesta al frontend
-        console.log("HOLA");
-        console.log(response.data)
-        console.log(data)
         res.json(response.data);
     } catch (error) {
         console.error('Error al conectar con FastAPI:', error);

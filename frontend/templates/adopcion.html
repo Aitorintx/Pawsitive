@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Animales Adoptables</title>
+  <link rel="stylesheet" href='static/css/style.css'>
+</head>
+<body>
+  <div class="cont" id="app-container">
+    <h4>Animales Adoptables</h4>
+
+    <div class="container-adop">
+        <div class="form-item-adop">
+        <label for="tipo">Tipo:</label>
+        <select id="tipo">
+            <option value="">-</option>
+        </select>
+        </div>
+
+        <div class="form-item">
+        <label for="estado">Estado:</label>
+        <select id="estado">
+            <option value="">-</option>
+        </select>
+        </div>
+
+        <button class="filtrar" id="filtrar", onclick="filtrarAnimales()">Filtrar</button>
+
+        <button class="arrow-button-adop" id="Volver">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#E0F4F1">
+                <path d="M14 7l-5 5 5 5V7z"/>
+            </svg>
+          </button>
+    </div>
+    <div class="container-lista">
+        <ul id="animalList" class="animal-list"></ul>
+    </div>
+  </div>
+  
+
+  <script>
+    // Obtener tipos y estados de la API
+    async function obtenerTiposYEstados() {
+      try {
+        // Obtener tipos
+        const tiposResponse = await fetch('http://localhost:3001/api/tipos');
+        const tipos = await tiposResponse.json();
+        console.log(tipos);
+
+        // Obtener estados
+        const estadosResponse = await fetch('http://localhost:3001/api/estados');
+        const estados = await estadosResponse.json();
+
+        // Llenar los combobox con los tipos y estados
+        const tipoSelect = document.getElementById('tipo');
+        const estadoSelect = document.getElementById('estado');
+
+        tipos.forEach(tipo => {
+          const option = document.createElement('option');
+          option.value = tipo.tipo;
+          option.textContent = tipo.tipo;
+          tipoSelect.appendChild(option);
+        });
+
+        estados.forEach(estado => {
+          const option = document.createElement('option');
+          option.value = estado.estado;
+          option.textContent = estado.estado;
+          estadoSelect.appendChild(option);
+        });
+      } catch (error) {
+        console.error('Error al obtener tipos y estados:', error);
+      }
+    }
+
+    // Función para filtrar animales por tipo y estado
+    async function filtrarAnimales() {
+      const tipo = document.getElementById('tipo').value;
+      const estado = document.getElementById('estado').value;
+
+      if (!tipo || !estado) {
+        alert("Por favor, seleccione un tipo y un estado.");
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://localhost:3001/api/animales/estado-tipo?estado=${estado}&tipo=${tipo}`);
+        const animales = await response.json();
+
+        const animalList = document.getElementById('animalList');
+        animalList.innerHTML = '';  // Limpiar lista antes de agregar nuevos resultados
+
+        if (animales.length > 0) {
+          animales.forEach(animal => {
+            const li = document.createElement('li');
+            li.classList.add('animal-item');
+            li.textContent = animal.nombre;
+            li.addEventListener('click', () => {
+              // Guardar el animal en localStorage
+              localStorage.setItem('animal', JSON.stringify(animal));
+
+              // Redirigir a la página de la ficha técnica
+              window.location.href = '/fichaTecnica'; // Asegúrate de tener esta página
+            });
+            animalList.appendChild(li);
+          });
+        } else {
+          animalList.innerHTML = '<li>No se encontraron animales con los filtros seleccionados.</li>';
+        }
+      } catch (error) {
+        console.error('Error al obtener los animales filtrados:', error);
+      }
+    }
+
+    // Llamar a la función para obtener los tipos y estados cuando la página cargue
+    window.onload = obtenerTiposYEstados;
+
+    function loadContent(url) {
+            fetch(url)
+                .then(response => response.text()) // Obtiene el HTML de la nueva página
+                .then(html => {
+                    const contenedorElemento = document.getElementById('app-container');
+                    contenedorElemento.innerHTML = html;  // Solo actualiza el contenido dinámico
+                    window.location.href= url;
+                })
+                .catch(error => {
+                    console.warn('Error al cargar el contenido:', error);
+                });
+        }
+
+    document.getElementById('Volver').addEventListener('click', function() {
+        loadContent('/pantallaInicio');  
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ficha Técnica del Animal</title>
+  <link rel="stylesheet" href='static/css/style.css'>
+</head>
+<body>
+
+  <h1>Ficha Técnica del Animal</h1>
+
+  <div class="animal-details" id="animalDetails">
+    <!-- Detalles del animal se llenarán aquí -->
+  </div>
+
+  <button class="arrow-button-ficha" onclick="window.history.back();">
+    <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="#E0F4F1">
+        <path d="M14 7l-5 5 5 5V7z"/>
+    </svg>
+  </button>
+
+  <script>
+    // Función para mostrar los detalles del animal
+    function mostrarDetallesAnimal() {
+      const animal = JSON.parse(localStorage.getItem('animal'));
+
+      if (animal) {
+        const detailsDiv = document.getElementById('animalDetails');
+
+        let imagen = '';
+        if (animal.tipo === 'Conejo') {
+          imagen = 'conejo.png'; // Aquí pon la ruta correcta de tu imagen de conejo
+        } else if (animal.tipo === 'Perro') {
+          imagen = 'perro2.png'; // Aquí pon la ruta correcta de tu imagen de perro
+        } else if (animal.tipo === 'Gato') {
+          imagen = 'gato.png'; // Aquí pon la ruta correcta de tu imagen de gato
+        }
+        
+        detailsDiv.innerHTML = `
+          <img src="static/images/${imagen}" alt="${animal.tipo}">
+          <h2>${animal.nombre}</h2>
+          <p><strong>Tipo:</strong> ${animal.tipo}</p>
+          <p><strong>Estado:</strong> ${animal.estado}</p>
+          <p><strong>Edad:</strong> ${animal.edad}</p>
+          <p><strong>Descripción Física:</strong> ${animal.desc_fisica}</p>
+          <p><strong>Descripción de Personalidad:</strong> ${animal.desc_personalidad}</p>
+          <p><strong>Descripción Adicional:</strong> ${animal.desc_adicional}</p>
+          <p><strong>Esterilizado:</strong> ${animal.esterilizado ? 'Sí' : 'No'}</p>
+          <p><strong>Vacunas:</strong> ${animal.vacunas ? 'Sí' : 'No'}</p>
+        `;
+      } else {
+        alert('No se encontró el animal.');
+      }
+
+      localStorage.removeItem('animal')
+    }
+
+    // Llamar a la función cuando la página cargue
+    window.onload = mostrarDetallesAnimal;
+  </script>
+
+</body>
+</html>

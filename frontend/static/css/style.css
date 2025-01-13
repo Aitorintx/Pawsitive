@@ -170,7 +170,7 @@ button {
 }
 
 .button-item img {
-    width: 80px;
+    width: 100px;
     height: auto;
 }
 .arrow-button2 {
@@ -600,4 +600,123 @@ select, input {
 
 .button-event:hover {
     background-color: #4c9e96;
+}
+
+.animal-details {
+    background-color: #fff;
+    padding: 20px;
+    margin: 20px auto;
+    border-radius: 5px;
+    width: 60%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center  ;
+  }
+  
+  .animal-details img {
+    width: 200px;  /* Ajusta el tamaño de la imagen */
+    height: auto;  /* Mantiene la relación de aspecto */
+    margin-bottom: 20px;
+  }
+  
+  .animal-details h2 {
+    color: #333;
+  }
+  
+  .animal-details p {
+    font-size: 16px;
+    color: #666;
+  }
+
+  .arrow-button-ficha {
+    position: relative;
+    top: -250px;
+    right: 1500px;
+    background-color: #8FB8A8;
+    padding: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 150px;
+    height:150px;
+}
+
+.arrow-button-adop {
+    position: relative;
+    top: -250px;
+    right: 500px;
+    background-color: #8FB8A8;
+    padding: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 48px;
+    height: 48px;
+}
+  h4 {
+    color: #333;
+    margin-top: 50px;
+    top: 0px;
+    position: absolute;
+  }
+
+  .container-adop {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+  }
+
+  .form-item-adop {
+    margin: 10px;
+  }
+
+  select {
+    padding: 10px;
+    font-size: 16px;
+    margin-right: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+
+  .filtrar {
+    padding: 10px 20px;
+    background-color: #FF5722;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .animal-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .animal-item {
+    background-color: #fff;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .container-lista{
+    display: flex;
+    flex-direction: column; 
+    overflow-y: auto;        
+    height: 200px;      
+    padding: 20px;
+    width: 100%;
+}
+
+.arrow-button-cal {
+    position: relative;
+    top: -450px;
+    right: 200px;
+    background-color: #8FB8A8;
+    padding: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 48px;
+    height: 48px;
 }

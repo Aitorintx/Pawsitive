@@ -36,6 +36,14 @@ app.get('/crearMascota', (req, res) => {
 app.get('/crearEvento', (req,res)=> {
     res.sendFile(path.join(__dirname, 'templates', 'crearEvento.html'));
 });
+app.get('/adopcion', (req,res)=> {
+    res.sendFile(path.join(__dirname, 'templates', 'adopcion.html'));
+});
+app.get('/fichaTecnica', (req,res)=> {
+    res.sendFile(path.join(__dirname, 'templates', 'fichaTecnica.html'));
+});
+
+
 
 // Configurar el puerto
 const PORT = 8000;

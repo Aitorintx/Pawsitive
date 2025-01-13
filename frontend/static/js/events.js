@@ -71,4 +71,24 @@ document.getElementById('submit-button').addEventListener('click', function() {
     crearEvento();  
 });
 
+
+
 window.onload = obtenerMascotas;
+
+document.getElementById('back-button').addEventListener('click', function() {
+    fetch('/calendario')  // Realiza la solicitud a la ruta de registro
+        .then(response => response.text())  // Recibe el contenido de la página
+        .then(html => {
+            // Inserta el contenido de registro.html en el contenedor
+            const contenedorElemento = document.getElementById('app-container');
+            if (contenedorElemento){
+                contenedorElemento.innerHTML = '';  // Borra el contenido anterior
+                contenedorElemento.innerHTML = html;
+                window.location.href='/calendario';
+            }
+            
+        })
+        .catch(error => {
+            console.warn('Error al cargar el template:', error);
+        });
+});

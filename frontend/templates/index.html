@@ -80,7 +80,7 @@
                     if (contenedorElemento){
                         contenedorElemento.innerHTML = '';  // Borra el contenido anterior
                         contenedorElemento.innerHTML = html;
-                        window.history.pushState({}, '', '/registro');
+                        window.location.href = "/registro";
                     }
                     
                 })

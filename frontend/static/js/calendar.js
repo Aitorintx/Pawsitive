@@ -136,6 +136,23 @@ document.getElementById('add-event-button').addEventListener('click', function()
         });
 });
 
+function loadContent(url) {
+    fetch(url)
+        .then(response => response.text()) // Obtiene el HTML de la nueva página
+        .then(html => {
+            const contenedorElemento = document.getElementById('app-container');
+            contenedorElemento.innerHTML = html;  // Solo actualiza el contenido dinámico
+            window.location.href= url;
+        })
+        .catch(error => {
+            console.warn('Error al cargar el contenido:', error);
+        });
+}
+
+document.getElementById('Volver').addEventListener('click', function() {
+    loadContent('/pantallaInicio');  
+});
+
 window.onload = () => {
     generateCalendar();
     obtenerEventosDelUsuario();
